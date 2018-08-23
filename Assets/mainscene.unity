@@ -376,6 +376,11 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c17097881b8282946be3e0308ca8c554, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &266706505 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1010905750547522, guid: c17097881b8282946be3e0308ca8c554,
+    type: 2}
+  m_PrefabInternal: {fileID: 266706504}
 --- !u!1001 &270779215
 Prefab:
   m_ObjectHideFlags: 0
@@ -1877,6 +1882,7 @@ MonoBehaviour:
   - {fileID: 1809232146}
   - {fileID: 1926920052}
   - {fileID: 505712887}
+  - {fileID: 266706505}
   PlacedItems: []
   CameraPos: {fileID: 1759955077}
   NextCameraPos: {fileID: 741869372}

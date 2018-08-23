@@ -24,21 +24,28 @@ public class Port : MonoBehaviour
     public ConnectorType inputConnectorType;
     public GameObject model;
     public bool isConnected;
+	GameManager m_manager;
 
     private void Start()
     {
+		m_manager = FindObjectOfType<GameManager>();
         model.SetActive(false);
         isConnected = false;
     }
 
     public void Place()
     {
+		if (isConnected)
+			return;
         model.SetActive(true);
         isConnected = true;
-    }
+		m_manager.ClickedPort(inputConnectorType);
+	}
 
     public void DetachCable()
     {
+		if (!isConnected)
+			return;
 		model.SetActive(false);
         isConnected = false;
     }

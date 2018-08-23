@@ -28,7 +28,4 @@ public class PlaceCablesManager : MonoBehaviour
 		if (portHitted != null && portHitted.inputConnectorType == currentSelectedCable)
 				portHitted.Place();
 	}
-
-
-
 }

@@ -1,14 +1,28 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+
+
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] PuertosDelPC;
-    public GameObject[] PlacedItems;
 
-	
+	internal class ConnectorsPlacedCounter
+	{
+		public ConnectorsPlacedCounter(int count)
+		{
+			this.count = count;
+		}
+
+		public int count;
+		public GameObject button;
+	}
+
+	public GameObject[] PuertosDelPC;
+    public GameObject[] PlacedItems;
 
 	public Transform CameraPos;
     public Transform NextCameraPos;
@@ -16,12 +30,13 @@ public class GameManager : MonoBehaviour
     public Button ResetandStartButton;
     public Transform resetbuttonplaceholder;
     bool ready;
-	bool isFirstPlay = true;
 
     //variables privadas
     private float Elapsed=0;
 	[SerializeField]
 	private GameObject m_buttonModel;
+
+	private Dictionary<ConnectorType, ConnectorsPlacedCounter> m_socketsLeft;
 
 	//metodos de unity
 	private void Start()
@@ -48,6 +63,22 @@ public class GameManager : MonoBehaviour
     //funcion de inicio de la simualcion
     public void StartSimulation()
     {
+		if(m_socketsLeft != null)
+		{
+			foreach (var item in m_socketsLeft)
+			{
+				if(item.Value.button != null)
+					Destroy(item.Value.button);
+			}
+		}
+		m_socketsLeft = new Dictionary<ConnectorType, ConnectorsPlacedCounter>
+		{
+			{ ConnectorType.KeyboardPS2, new ConnectorsPlacedCounter(1) },
+			{ ConnectorType.PowerSupply, new ConnectorsPlacedCounter(2) },
+			{ ConnectorType.USB, new ConnectorsPlacedCounter(4) },
+			{ ConnectorType.VGA, new ConnectorsPlacedCounter(1) },
+			{ ConnectorType.RJ45, new ConnectorsPlacedCounter(2) }
+		};
 		ready = true;
         StartCoroutine(ChangeCamerapos());
         //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
@@ -69,12 +100,16 @@ public class GameManager : MonoBehaviour
 
 	public void FillCanvas(GameObject layout)
 	{
-		if (!isFirstPlay)
-			return;
+		foreach (Transform child in layout.GetComponent<Transform>())
+		{
+
+		}
+
 		var cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
 		foreach (var connectorType in Enum.GetValues(typeof(ConnectorType)))
 		{
-			if((ConnectorType)connectorType == ConnectorType.None)
+			var connector = (ConnectorType)connectorType;
+			if (connector == ConnectorType.None)
 			{
 				continue;
 			}
@@ -82,11 +117,28 @@ public class GameManager : MonoBehaviour
 			button.GetComponent<Transform>().SetParent(layout.GetComponent<Transform>());
 			button.GetComponentInChildren<Text>().text = connectorType.ToString();
 
+			ConnectorsPlacedCounter connectorCounter;
+			if(m_socketsLeft.TryGetValue(connector, out connectorCounter))
+			{
+				connectorCounter.button = button;
+			}
+
 			button.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
 			});
 		}
-		isFirstPlay = false;
+	}
+
+	public void ClickedPort(ConnectorType type)
+	{
+		ConnectorsPlacedCounter connectorCounter;
+		if (!m_socketsLeft.TryGetValue(type, out connectorCounter))
+			return;
+		connectorCounter.count--;
+		if(connectorCounter.count <= 0)
+		{
+			Destroy(connectorCounter.button);
+		}
 	}
 }
