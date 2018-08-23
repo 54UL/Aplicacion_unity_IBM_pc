@@ -1,34 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
-
-
-
+public class GameManager : MonoBehaviour
+{
     public GameObject[] PuertosDelPC;
-    public GameObject[] PlacedItems; //perdoname alan por usar arrays, list es el mejor pero no se ven en el inspector =( xd
+    public GameObject[] PlacedItems;
 
+	
 
-    public Transform CameraPos;
+	public Transform CameraPos;
     public Transform NextCameraPos;
     public float TransitionTime = 3.4f;
     public Button ResetandStartButton;
     public Transform resetbuttonplaceholder;
     bool ready;
+	bool isFirstPlay = true;
 
     //variables privadas
     private float Elapsed=0;
+	[SerializeField]
+	private GameObject m_buttonModel;
 
-
-
-    //metodos de unity
-    private void Start()
+	//metodos de unity
+	private void Start()
     {
-
         ready = false;
-        resetSimulation();
+        ResetSimulation();
     }
 
 
@@ -43,32 +42,51 @@ public class GameManager : MonoBehaviour {
             Elapsed +=  Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-       
-    
     }
 
 
     //funcion de inicio de la simualcion
-    public void startSimulation()
+    public void StartSimulation()
     {
-        ready = true;
-        StartCoroutine(this.ChangeCamerapos());
+		ready = true;
+        StartCoroutine(ChangeCamerapos());
         //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
         ResetandStartButton.GetComponentInChildren<Text>().text = "restaurar";
+		ResetSimulation();
     }
 
-    public void resetSimulation()
+	/// <summary>
+	/// Performs a detach-all cables
+	/// </summary>
+    public void ResetSimulation()
     {
-        //Reset things
-       
         foreach (GameObject Iterador in PuertosDelPC)
         {
-            Iterador.GetComponent<PuertoEntrada>().ActualmenteColocado = false;
-            //aqui tambien van los objetos ya colocados
-        }
-       
+			var port = Iterador.GetComponent<Port>();
+			port.DetachCable();
+		}
     }
 
+	public void FillCanvas(GameObject layout)
+	{
+		if (!isFirstPlay)
+			return;
+		var cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
+		foreach (var connectorType in Enum.GetValues(typeof(ConnectorType)))
+		{
+			if((ConnectorType)connectorType == ConnectorType.None)
+			{
+				continue;
+			}
+			var button = GameObject.Instantiate(m_buttonModel);
+			button.GetComponent<Transform>().SetParent(layout.GetComponent<Transform>());
+			button.GetComponentInChildren<Text>().text = connectorType.ToString();
 
-	
+			button.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
+			});
+		}
+		isFirstPlay = false;
+	}
 }

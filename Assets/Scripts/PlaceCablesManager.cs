@@ -2,41 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all the cables that need to be connected
+/// </summary>
 public class PlaceCablesManager : MonoBehaviour
 {
-   
+   public ConnectorType currentSelectedCable;
 
-    //publicas
- 
-   public TiposDeConector currentSelectedCable;
-
-
-
-    private void Start()
-    {
-        
-    }
-
+	/// <summary>
+	/// Logic that needs to be updated every frame
+	/// </summary>
     private void Update()
     {
+		if (!Input.GetKeyDown(KeyCode.Mouse0))
+			return;
 
-        Ray rashito = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit golpexd;
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            if (Physics.Raycast(rashito, out golpexd))
-            {
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hittedObject;
 
-                Debug.Log(golpexd.transform.name);
-                PuertoEntrada componenteexterno = golpexd.transform.GetComponent<PuertoEntrada>();
+		if (!Physics.Raycast(ray, out hittedObject))
+			return;
 
-                if (componenteexterno != null)
-                    if (componenteexterno.conectorEntrada == currentSelectedCable)
-                        componenteexterno.Place();
-            }
+		Port portHitted = hittedObject.transform.GetComponent<Port>();
 
-        }
-    }
+		if (portHitted != null && portHitted.inputConnectorType == currentSelectedCable)
+				portHitted.Place();
+	}
 
 
 
