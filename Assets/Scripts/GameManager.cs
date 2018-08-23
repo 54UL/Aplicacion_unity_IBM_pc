@@ -21,16 +21,25 @@ public class GameManager : MonoBehaviour
 		public GameObject button;
 	}
 
-	public GameObject[] PuertosDelPC;
-    public GameObject[] PlacedItems;
-
-	public Transform CameraPos;
+    public GameObject[] PuertosDelPC;
+    private PlaceCablesManager cablesManager;
+    public Transform CameraPos;
     public Transform NextCameraPos;
     public float TransitionTime = 3.4f;
+    bool ready;
+   
+    [Header("UI CONTROLS")]
     public Button ResetandStartButton;
     public Transform resetbuttonplaceholder;
-    bool ready;
 
+    public GameObject panel1, panel2;
+    public GameObject Canvas3Dinfo;
+    public Text ErrorMessage; 
+    public Toggle ShowInformation;
+    public Text InfoText;
+    
+
+   
     //variables privadas
     private float Elapsed=0;
 	[SerializeField]
@@ -38,15 +47,30 @@ public class GameManager : MonoBehaviour
 
 	private Dictionary<ConnectorType, ConnectorsPlacedCounter> m_socketsLeft;
 
+    //dictionary for the instructions
+    private Dictionary<ConnectorType, string> instrucciones;
+        
+    
+
 	//metodos de unity
 	private void Start()
     {
         ready = false;
+        cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
         ResetSimulation();
+        instrucciones = new Dictionary<ConnectorType, string> {
+            { ConnectorType.None,"agarra algun componente" },
+            { ConnectorType.PowerSupply,"conecta P1-T1-C1 Y P1-T1-C2 (power supply)" },
+            { ConnectorType.RJ45,"conecta P1-T1-E1 Y P1-T1-E2   (RJ45) " },
+            { ConnectorType.KeyboardPS2,"conecta P1-T1-PS2     (Teclado)" },
+            { ConnectorType.USB,"conecta P1-T1- DEL U1 AL U4 (USB)" },
+            { ConnectorType.VGA,"conecta P1-T1-V (VGA)" }
+            };
     }
 
-
-    //corutina del transform
+    /// <summary>
+    ///Corrutines
+    /// </summary>
     IEnumerator ChangeCamerapos()
     {
         while (Elapsed < TransitionTime)
@@ -59,7 +83,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator ShowErrorMessage()
+    {
+        ErrorMessage.color = Color.red;
+        ErrorMessage.text = "¡Ahi no va ese cable!";
+        ErrorMessage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        ErrorMessage.gameObject.SetActive(false);
+        cablesManager.WrongSlot = false;
+    }
 
+    /// <summary>
+	/// Initialize the simulation
+	/// </summary>
     //funcion de inicio de la simualcion
     public void StartSimulation()
     {
@@ -81,7 +117,9 @@ public class GameManager : MonoBehaviour
 		};
 		ready = true;
         StartCoroutine(ChangeCamerapos());
+        ShowInformation.gameObject.SetActive(true);
         //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
+
         ResetandStartButton.GetComponentInChildren<Text>().text = "restaurar";
 		ResetSimulation();
     }
@@ -91,6 +129,8 @@ public class GameManager : MonoBehaviour
 	/// </summary>
     public void ResetSimulation()
     {
+        cablesManager.PiceCount = 0;
+        ErrorMessage.gameObject.SetActive(false);
         foreach (GameObject Iterador in PuertosDelPC)
         {
 			var port = Iterador.GetComponent<Port>();
@@ -105,10 +145,12 @@ public class GameManager : MonoBehaviour
 
 		}
 
-		var cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
+		
 		foreach (var connectorType in Enum.GetValues(typeof(ConnectorType)))
 		{
 			var connector = (ConnectorType)connectorType;
+        
+
 			if (connector == ConnectorType.None)
 			{
 				continue;
@@ -126,7 +168,9 @@ public class GameManager : MonoBehaviour
 			button.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
-			});
+                //change the text when something is selected
+                InfoText.text = instrucciones[cablesManager.currentSelectedCable];
+            });
 		}
 	}
 
@@ -141,4 +185,26 @@ public class GameManager : MonoBehaviour
 			Destroy(connectorCounter.button);
 		}
 	}
+
+    public void toggleInfo()
+    {
+        panel1.SetActive(!panel1.activeSelf);
+        panel2.SetActive(!panel2.activeSelf);
+        Canvas3Dinfo.SetActive(!Canvas3Dinfo.activeSelf);
+    }
+
+    public void Update()
+    {
+        if (cablesManager.PiceCount >= 10)
+        {
+            ErrorMessage.color = Color.green;
+            ErrorMessage.text = "¡Has completado las conexiones!";
+            ErrorMessage.gameObject.SetActive(true);
+           
+        }
+           
+        if(cablesManager.WrongSlot)
+               StartCoroutine(ShowErrorMessage());
+
+    }
 }
