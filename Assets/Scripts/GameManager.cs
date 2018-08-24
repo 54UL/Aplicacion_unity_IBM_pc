@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Represents the PC ports
 	/// </summary>
-	public GameObject[] PuertosDelPC;
+	[SerializeField]
+	private List<GameObject> m_PcPorts;
 	private PlaceCablesManager cablesManager;
 	public Transform CameraPos;
 	public Transform NextCameraPos;
@@ -45,14 +46,14 @@ public class GameManager : MonoBehaviour
 	public Text InfoText;
 
 
-	private float Elapsed = 0;
+	private float elapsed = 0;
 	[SerializeField]
 	private GameObject m_buttonModel;
 
 	private Dictionary<ConnectorType, ConnectorsPlacedCounter> m_socketsLeft;
 
 	//dictionary for the instructions
-	private Dictionary<ConnectorType, string> instrucciones;
+	private Dictionary<ConnectorType, string> instructions;
 
 
 
@@ -61,9 +62,16 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void Start()
 	{
+		m_PcPorts = new List<GameObject>();
+		var ports = FindObjectsOfType<Port>();
+		m_PcPorts.Capacity = ports.Length;
+		foreach (var port in ports)
+		{
+			m_PcPorts.Add(port.gameObject);
+		};
 		cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
 		ResetSimulation();
-		instrucciones = new Dictionary<ConnectorType, string> {
+		instructions = new Dictionary<ConnectorType, string> {
 			{ ConnectorType.None,"agarra algun componente" },
 			{ ConnectorType.PowerSupply,"conecta P1-T1-C1 Y P1-T1-C2 (power supply)" },
 			{ ConnectorType.RJ45,"conecta P1-T1-E1 Y P1-T1-E2   (RJ45) " },
@@ -78,12 +86,12 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	IEnumerator ChangeCamerapos()
 	{
-		while (Elapsed < TransitionTime)
+		while (elapsed < TransitionTime)
 		{
 			//positional things
-			CameraPos.position = Vector3.Lerp(CameraPos.position, NextCameraPos.position, Elapsed);
-			CameraPos.rotation = Quaternion.Slerp(CameraPos.rotation, NextCameraPos.rotation, Elapsed);
-			Elapsed += Time.deltaTime;
+			CameraPos.position = Vector3.Lerp(CameraPos.position, NextCameraPos.position, elapsed);
+			CameraPos.rotation = Quaternion.Slerp(CameraPos.rotation, NextCameraPos.rotation, elapsed);
+			elapsed += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
 	}
@@ -138,7 +146,7 @@ public class GameManager : MonoBehaviour
 	{
 		cablesManager.pieceCount = 0;
 		ErrorMessage.gameObject.SetActive(false);
-		foreach (GameObject Iterador in PuertosDelPC)
+		foreach (GameObject Iterador in m_PcPorts)
 		{
 			var port = Iterador.GetComponent<Port>();
 			port.DetachCable();
@@ -177,7 +185,7 @@ public class GameManager : MonoBehaviour
 			{
 				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
 				// change the text when something is selected
-				InfoText.text = instrucciones[cablesManager.currentSelectedCable];
+				InfoText.text = instructions[cablesManager.currentSelectedCable];
 			});
 		}
 	}

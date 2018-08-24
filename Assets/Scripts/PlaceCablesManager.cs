@@ -30,7 +30,7 @@ public class PlaceCablesManager : MonoBehaviour
 		Port portHitted = hittedObject.transform.GetComponent<Port>();
 
 		// User hitted a port and the selected connector is the same as the port connector
-		if (portHitted != null && portHitted.inputConnectorType == currentSelectedCable)
+		if (portHitted != null && portHitted.PortConnectorType == currentSelectedCable)
 		{
 			if (portHitted.Place())
 			{
@@ -38,8 +38,8 @@ public class PlaceCablesManager : MonoBehaviour
 				wrongSlot = false;
 			}
 		}
-		else if (portHitted != null && portHitted.inputConnectorType != currentSelectedCable && currentSelectedCable != ConnectorType.None)
+		else if (portHitted != null && portHitted.PortConnectorType != currentSelectedCable && 
+				currentSelectedCable != ConnectorType.None)
 			wrongSlot = true;
-
 	}
 }

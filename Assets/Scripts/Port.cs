@@ -21,9 +21,12 @@ public enum ConnectorType
 /// </summary>
 public class Port : MonoBehaviour
 {
-	public ConnectorType inputConnectorType;
-	public GameObject model;
-	public bool isConnected;
+	[SerializeField]
+	private ConnectorType inputConnectorType;
+	public ConnectorType PortConnectorType { get { return inputConnectorType; } }
+	[SerializeField]
+	private GameObject model;
+	private bool isConnected;
 	GameManager m_manager;
 
 	private void Start()
