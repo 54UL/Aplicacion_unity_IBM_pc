@@ -21,32 +21,40 @@ public enum ConnectorType
 /// </summary>
 public class Port : MonoBehaviour
 {
-    public ConnectorType inputConnectorType;
-    public GameObject model;
-    public bool isConnected;
+	public ConnectorType inputConnectorType;
+	public GameObject model;
+	public bool isConnected;
 	GameManager m_manager;
 
-    private void Start()
-    {
+	private void Start()
+	{
 		m_manager = FindObjectOfType<GameManager>();
-        model.SetActive(false);
-        isConnected = false;
-    }
-
-    public void Place()
-    {
-		if (isConnected)
-			return;
-        model.SetActive(true);
-        isConnected = true;
-		m_manager.ClickedPort(inputConnectorType);
+		model.SetActive(false);
+		isConnected = false;
 	}
 
-    public void DetachCable()
-    {
+	/// <summary>
+	/// Connect the cable to a slot
+	/// </summary>
+	/// <returns>true if the cable was succesfuly connected, false if it was already connected</returns>
+	public bool Place()
+	{
+		if (isConnected)
+			return false;
+		model.SetActive(true);
+		isConnected = true;
+		m_manager.ClickedPort(inputConnectorType);
+		return true;
+	}
+
+	/// <summary>
+	/// Disconnect the cable
+	/// </summary>
+	public void DetachCable()
+	{
 		if (!isConnected)
 			return;
 		model.SetActive(false);
-        isConnected = false;
-    }
+		isConnected = false;
+	}
 }
