@@ -1310,7 +1310,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1551313261}
-        m_MethodName: toggleInfo
+        m_MethodName: ToggleInfo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4229,8 +4229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSelectedCable: 0
-  PiceCount: 0
-  WrongSlot: 0
+  pieceCount: 0
+  wrongSlot: 0
 --- !u!1 &1771799933 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1511147764821832, guid: 7e252d7165db9d44287a22cf3c4852ff,
