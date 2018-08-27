@@ -8,8 +8,8 @@ using UnityEngine;
 public class PlaceCablesManager : MonoBehaviour
 {
    public ConnectorType currentSelectedCable;
-   public int PiceCount = 0;
-    public bool WrongSlot;
+   public int pieceCount = 0;
+   public bool WrongSlot;
 
 	/// <summary>
 	/// Logic that needs to be updated every frame
@@ -29,8 +29,9 @@ public class PlaceCablesManager : MonoBehaviour
 
         if (portHitted != null && portHitted.inputConnectorType == currentSelectedCable)
         {
-            portHitted.Place();
-            PiceCount++;
+			if (!portHitted.Place())
+				return;
+            pieceCount++;
             WrongSlot = false;
         }
         else if(portHitted != null && portHitted.inputConnectorType != currentSelectedCable && currentSelectedCable!=ConnectorType.None)

@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
     public void ResetSimulation()
     {
-        cablesManager.PiceCount = 0;
+        cablesManager.pieceCount = 0;
         ErrorMessage.gameObject.SetActive(false);
         foreach (GameObject Iterador in PuertosDelPC)
         {
@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (cablesManager.PiceCount >= 10)
+        if (cablesManager.pieceCount >= 10)
         {
             ErrorMessage.color = Color.green;
             ErrorMessage.text = "¡Has completado las conexiones!";
