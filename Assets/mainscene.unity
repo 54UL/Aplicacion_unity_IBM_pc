@@ -27,7 +27,7 @@ RenderSettings:
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
-  m_HaloStrength: 0.5
+  m_HaloStrength: 0.042
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
@@ -48,8 +48,8 @@ LightmapSettings:
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
-    m_IndirectOutputScale: 0.066
-    m_AlbedoBoost: 1.11
+    m_IndirectOutputScale: 0.035
+    m_AlbedoBoost: 1.03
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 1
     m_EnableBakedLightmaps: 1
@@ -61,8 +61,8 @@ LightmapSettings:
     m_AtlasSize: 256
     m_AO: 1
     m_AOMaxDistance: 0.1
-    m_CompAOExponent: 0.22
-    m_CompAOExponentDirect: 0.21
+    m_CompAOExponent: 7.21
+    m_CompAOExponentDirect: 0.73
     m_Padding: 2
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 0
@@ -448,6 +448,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1010905750547522, guid: c17097881b8282946be3e0308ca8c554, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545166386408190, guid: c17097881b8282946be3e0308ca8c554,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114545166386408190, guid: c17097881b8282946be3e0308ca8c554,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c17097881b8282946be3e0308ca8c554, type: 2}
   m_IsPrefabAsset: 0
@@ -505,6 +519,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1402430489131682, guid: 7e252d7165db9d44287a22cf3c4852ff, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028220701646444, guid: 7e252d7165db9d44287a22cf3c4852ff,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028220701646444, guid: 7e252d7165db9d44287a22cf3c4852ff,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e252d7165db9d44287a22cf3c4852ff, type: 2}
   m_IsPrefabAsset: 0
@@ -561,6 +589,20 @@ Prefab:
         type: 2}
       propertyPath: inputConnectorType
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347860409430956, guid: afe0dd31aacfee04c92c62ec93d3a68e, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114279363051616876, guid: afe0dd31aacfee04c92c62ec93d3a68e,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114279363051616876, guid: afe0dd31aacfee04c92c62ec93d3a68e,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afe0dd31aacfee04c92c62ec93d3a68e, type: 2}
@@ -1213,6 +1255,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1575489137646260, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
   m_IsPrefabAsset: 0
@@ -1344,8 +1400,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 741869371}
-  m_LocalRotation: {x: 0.06261428, y: -0.7145214, z: 0.06448272, w: 0.69381595}
-  m_LocalPosition: {x: 7.207479, y: 0.5999106, z: -1.1278443}
+  m_LocalRotation: {x: -0.028025772, y: 0.5827233, z: -0.020112563, w: -0.81193817}
+  m_LocalPosition: {x: 7.5529118, y: -0.10698187, z: -3.3236904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2384,6 +2440,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1575489137646260, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
   m_IsPrefabAsset: 0
@@ -2464,7 +2534,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: P1-T1-P2
+  m_Text: selecciona una pieza
 --- !u!222 &1232779212
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2682,6 +2752,20 @@ Prefab:
         type: 2}
       propertyPath: inputConnectorType
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296921315534498, guid: 6e08f9c3a28a95d428cfd2ecbf6592aa, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114174428056634256, guid: 6e08f9c3a28a95d428cfd2ecbf6592aa,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114174428056634256, guid: 6e08f9c3a28a95d428cfd2ecbf6592aa,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e08f9c3a28a95d428cfd2ecbf6592aa, type: 2}
@@ -3310,6 +3394,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1575489137646260, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
   m_IsPrefabAsset: 0
@@ -3426,7 +3524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 194, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1543335682
@@ -3511,7 +3609,7 @@ MonoBehaviour:
   NextCameraPos: {fileID: 741869372}
   TransitionTime: 2
   ResetandStartButton: {fileID: 85704263}
-  resetbuttonplaceholder: {fileID: 1081856259}
+  resetbuttonplaceholde: {fileID: 0}
   panel1: {fileID: 1019383812}
   panel2: {fileID: 891811530}
   Canvas3Dinfo: {fileID: 803328477}
@@ -3520,6 +3618,11 @@ MonoBehaviour:
   InfoText: {fileID: 1232779211}
   m_buttonModel: {fileID: 1776370663503970, guid: 61068f240b6a372469e262b11d2df688,
     type: 2}
+  powersupplyimg: {fileID: 21300000, guid: 5b2fb71a4ddc15c4089ef82d6a0ad5d0, type: 3}
+  USBimg: {fileID: 21300000, guid: 8cd6fb5bc0841b54e99eb6bd2e25109e, type: 3}
+  PS2img: {fileID: 21300000, guid: 56cb502728a4a434bbc460324ed59e85, type: 3}
+  RJ45img: {fileID: 21300000, guid: 21af2a9f81884c34d9897e7c8617134f, type: 3}
+  VGAimg: {fileID: 21300000, guid: f57d152992568f447b3ec78ad3f1cd17, type: 3}
 --- !u!4 &1551313262
 Transform:
   m_ObjectHideFlags: 0
@@ -3857,9 +3960,9 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 9.82
-  m_Range: 9.020957
-  m_SpotAngle: 64.14604
+  m_Intensity: 7.01
+  m_Range: 8.781201
+  m_SpotAngle: 52.330597
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -3876,7 +3979,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -3890,13 +3993,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1583620488}
-  m_LocalRotation: {x: 0.62885404, y: -0.32333052, z: -0.32333052, w: 0.62885404}
-  m_LocalPosition: {x: 9.04, y: 3.43, z: -0.87}
+  m_LocalRotation: {x: -0.07467007, y: 0.70736814, z: -0.077800415, w: -0.69857126}
+  m_LocalPosition: {x: 9.621735, y: 1.41, z: -1.0544715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 144.42099, y: 89.99999, z: 89.99999}
+  m_LocalEulerAnglesHint: {x: 167.62, y: 89.301994, z: 180.179}
 --- !u!1 &1600077317
 GameObject:
   m_ObjectHideFlags: 0
@@ -4285,6 +4388,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1268523730128566, guid: 4f084265fabad3748912098f88340b5b, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114055079541720806, guid: 4f084265fabad3748912098f88340b5b,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114055079541720806, guid: 4f084265fabad3748912098f88340b5b,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f084265fabad3748912098f88340b5b, type: 2}
   m_IsPrefabAsset: 0
@@ -4557,6 +4674,20 @@ Prefab:
       propertyPath: inputConnectorType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1402430489131682, guid: 7e252d7165db9d44287a22cf3c4852ff, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028220701646444, guid: 7e252d7165db9d44287a22cf3c4852ff,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028220701646444, guid: 7e252d7165db9d44287a22cf3c4852ff,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e252d7165db9d44287a22cf3c4852ff, type: 2}
   m_IsPrefabAsset: 0
@@ -4634,6 +4765,20 @@ Prefab:
         type: 2}
       propertyPath: inputConnectorType
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1575489137646260, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: AnimationRelativeStart.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438359747890638, guid: 8423a5c49cc139d47991594bd7f9dfd9,
+        type: 2}
+      propertyPath: TransitionSpeed
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8423a5c49cc139d47991594bd7f9dfd9, type: 2}

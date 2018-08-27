@@ -15,11 +15,24 @@ public class GameManager : MonoBehaviour
 		public ConnectorsPlacedCounter(int count)
 		{
 			this.count = count;
-		}
-
+        }
 		public int count;
 		public GameObject button;
 	}
+
+    internal class SocketInfo
+    {
+        public SocketInfo(string infoText, Sprite referenceimg)
+        {
+
+            inftxt = infoText;
+            btnimage= referenceimg;
+         }
+
+        public String inftxt;
+        public Sprite btnimage;
+
+    }
 
     public GameObject[] PuertosDelPC;
     private PlaceCablesManager cablesManager;
@@ -30,42 +43,34 @@ public class GameManager : MonoBehaviour
    
     [Header("UI CONTROLS")]
     public Button ResetandStartButton;
-    public Transform resetbuttonplaceholder;
-
+    public Transform resetbuttonplaceholde;
     public GameObject panel1, panel2;
     public GameObject Canvas3Dinfo;
     public Text ErrorMessage; 
     public Toggle ShowInformation;
     public Text InfoText;
-    
-
-   
     //variables privadas
     private float Elapsed=0;
 	[SerializeField]
 	private GameObject m_buttonModel;
-
 	private Dictionary<ConnectorType, ConnectorsPlacedCounter> m_socketsLeft;
-
     //dictionary for the instructions
-    private Dictionary<ConnectorType, string> instrucciones;
-        
-    
+    private Dictionary<ConnectorType, SocketInfo> instrucciones;
 
-	//metodos de unity
-	private void Start()
+    [Header("preview images")]
+    public Sprite powersupplyimg;
+    public Sprite USBimg;
+    public Sprite PS2img;
+    public Sprite RJ45img;
+    public Sprite VGAimg;
+
+    //metodos de unity
+    private void Start()
     {
         ready = false;
         cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
         ResetSimulation();
-        instrucciones = new Dictionary<ConnectorType, string> {
-            { ConnectorType.None,"agarra algun componente" },
-            { ConnectorType.PowerSupply,"conecta P1-T1-C1 Y P1-T1-C2 (power supply)" },
-            { ConnectorType.RJ45,"conecta P1-T1-E1 Y P1-T1-E2   (RJ45) " },
-            { ConnectorType.KeyboardPS2,"conecta P1-T1-PS2     (Teclado)" },
-            { ConnectorType.USB,"conecta P1-T1- DEL U1 AL U4 (USB)" },
-            { ConnectorType.VGA,"conecta P1-T1-V (VGA)" }
-            };
+  
     }
 
     /// <summary>
@@ -115,7 +120,18 @@ public class GameManager : MonoBehaviour
 			{ ConnectorType.VGA, new ConnectorsPlacedCounter(1) },
 			{ ConnectorType.RJ45, new ConnectorsPlacedCounter(2) }
 		};
-		ready = true;
+
+        instrucciones = new Dictionary<ConnectorType, SocketInfo> {
+            { ConnectorType.None, new SocketInfo( "agarra algun componente",null) },
+            { ConnectorType.PowerSupply,new SocketInfo("conecta P1-T1-C1 Y P1-T1-C2 (power supply)",powersupplyimg) },
+            { ConnectorType.RJ45,new SocketInfo("conecta P1-T1-E1 Y P1-T1-E2   (RJ45) ",RJ45img) },
+            { ConnectorType.KeyboardPS2,new SocketInfo("conecta P1-T1-PS2     (Teclado)",PS2img) },
+            { ConnectorType.USB,new SocketInfo("conecta P1-T1- DEL U1 AL U4 (USB)",USBimg) },
+            { ConnectorType.VGA,new SocketInfo("conecta P1-T1-V (VGA)",VGAimg) }
+            };
+
+
+        ready = true;
         StartCoroutine(ChangeCamerapos());
         ShowInformation.gameObject.SetActive(true);
         //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
@@ -158,6 +174,7 @@ public class GameManager : MonoBehaviour
 			var button = GameObject.Instantiate(m_buttonModel);
 			button.GetComponent<Transform>().SetParent(layout.GetComponent<Transform>());
 			button.GetComponentInChildren<Text>().text = connectorType.ToString();
+            button.GetComponentInChildren<Image>().sprite = instrucciones[connector].btnimage;
 
 			ConnectorsPlacedCounter connectorCounter;
 			if(m_socketsLeft.TryGetValue(connector, out connectorCounter))
@@ -169,7 +186,7 @@ public class GameManager : MonoBehaviour
 			{
 				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
                 //change the text when something is selected
-                InfoText.text = instrucciones[cablesManager.currentSelectedCable];
+                InfoText.text = instrucciones[cablesManager.currentSelectedCable].inftxt;
             });
 		}
 	}

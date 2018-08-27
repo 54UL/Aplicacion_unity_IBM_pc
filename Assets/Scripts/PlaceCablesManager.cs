@@ -34,7 +34,6 @@ public class PlaceCablesManager : MonoBehaviour
             WrongSlot = false;
         }
         else if(portHitted != null && portHitted.inputConnectorType != currentSelectedCable && currentSelectedCable!=ConnectorType.None)
-            WrongSlot = true;
-				
+            WrongSlot = true;	
 	}
 }
