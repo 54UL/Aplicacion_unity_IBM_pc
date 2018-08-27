@@ -6,10 +6,14 @@ using UnityEngine.UI;
 using System.Linq;
 
 
-
+/// <summary>
+/// Manages the game state such as port status
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-
+	/// <summary>
+	/// Represents a heap-stored object that handles how many ports of a specified type are connected
+	/// </summary>
 	internal class ConnectorsPlacedCounter
 	{
 		public ConnectorsPlacedCounter(int count)
@@ -19,9 +23,8 @@ public class GameManager : MonoBehaviour
 		public int count;
 		public GameObject button;
 	}
-
-    internal class SocketInfo
-    {
+  internal class SocketInfo
+  {
         public SocketInfo(string infoText, Sprite referenceimg)
         {
 
@@ -97,18 +100,15 @@ public class GameManager : MonoBehaviour
         ErrorMessage.gameObject.SetActive(false);
         cablesManager.WrongSlot = false;
     }
-
-    /// <summary>
 	/// Initialize the simulation
 	/// </summary>
-    //funcion de inicio de la simualcion
-    public void StartSimulation()
-    {
-		if(m_socketsLeft != null)
+	public void StartSimulation()
+	{
+		if (m_socketsLeft != null)
 		{
 			foreach (var item in m_socketsLeft)
 			{
-				if(item.Value.button != null)
+				if (item.Value.button != null)
 					Destroy(item.Value.button);
 			}
 		}
@@ -120,7 +120,6 @@ public class GameManager : MonoBehaviour
 			{ ConnectorType.VGA, new ConnectorsPlacedCounter(1) },
 			{ ConnectorType.RJ45, new ConnectorsPlacedCounter(2) }
 		};
-
         instrucciones = new Dictionary<ConnectorType, SocketInfo> {
             { ConnectorType.None, new SocketInfo( "agarra algun componente",null) },
             { ConnectorType.PowerSupply,new SocketInfo("conecta P1-T1-C1 Y P1-T1-C2 (power supply)",powersupplyimg) },
@@ -136,9 +135,9 @@ public class GameManager : MonoBehaviour
         ShowInformation.gameObject.SetActive(true);
         //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
 
-        ResetandStartButton.GetComponentInChildren<Text>().text = "restaurar";
+		ResetandStartButton.GetComponentInChildren<Text>().text = "restaurar";
 		ResetSimulation();
-    }
+	}
 
 	/// <summary>
 	/// Performs a detach-all cables
@@ -147,37 +146,36 @@ public class GameManager : MonoBehaviour
     {
         cablesManager.pieceCount = 0;
         ErrorMessage.gameObject.SetActive(false);
-        foreach (GameObject Iterador in PuertosDelPC)
-        {
 			var port = Iterador.GetComponent<Port>();
 			port.DetachCable();
 		}
-    }
+	}
 
+	/// <summary>
+	/// Fillst the canvas with all type of connector types (connectors are getted from an enum)
+	/// </summary>
+	/// <param name="layout">Layout that stores the buttons</param>
 	public void FillCanvas(GameObject layout)
 	{
-		foreach (Transform child in layout.GetComponent<Transform>())
-		{
-
-		}
-
-		
 		foreach (var connectorType in Enum.GetValues(typeof(ConnectorType)))
 		{
 			var connector = (ConnectorType)connectorType;
-        
 
+			// first pass, we do not need "None"
 			if (connector == ConnectorType.None)
 			{
 				continue;
 			}
+
+			// create the gameobject and set his parent and his text
 			var button = GameObject.Instantiate(m_buttonModel);
 			button.GetComponent<Transform>().SetParent(layout.GetComponent<Transform>());
 			button.GetComponentInChildren<Text>().text = connectorType.ToString();
             button.GetComponentInChildren<Image>().sprite = instrucciones[connector].btnimage;
 
+			// Create heap managed counter
 			ConnectorsPlacedCounter connectorCounter;
-			if(m_socketsLeft.TryGetValue(connector, out connectorCounter))
+			if (m_socketsLeft.TryGetValue(connector, out connectorCounter))
 			{
 				connectorCounter.button = button;
 			}
@@ -191,13 +189,15 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Called when a port is connected
+	/// </summary>
+	/// <param name="type">type of the port that was previously connected</param>
 	public void ClickedPort(ConnectorType type)
 	{
-		ConnectorsPlacedCounter connectorCounter;
-		if (!m_socketsLeft.TryGetValue(type, out connectorCounter))
-			return;
+		ConnectorsPlacedCounter connectorCounter = m_socketsLeft[type];
 		connectorCounter.count--;
-		if(connectorCounter.count <= 0)
+		if (connectorCounter.count <= 0)
 		{
 			Destroy(connectorCounter.button);
 		}
@@ -222,6 +222,5 @@ public class GameManager : MonoBehaviour
            
         if(cablesManager.WrongSlot)
                StartCoroutine(ShowErrorMessage());
-
     }
 }

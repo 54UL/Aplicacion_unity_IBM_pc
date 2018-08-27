@@ -28,8 +28,6 @@ public class Port : MonoBehaviour
 	[Header("animaciones")]
 	public float TransitionSpeed = 0.6f;
 	public Vector3 AnimationRelativeStart = new Vector3(5, 0, 0);
-
-
 	private Vector3 ModelStartPos;
 	private Vector3 FromPosition;
 	/// <summary>
@@ -62,7 +60,6 @@ public class Port : MonoBehaviour
 	/// <summary>
 	///  set the propierty to show the ports and starts his transition
 	/// </summary>
-
 	public bool Place()
 	{
 		if (isConnected)
