@@ -19,98 +19,87 @@ public class GameManager : MonoBehaviour
 		public ConnectorsPlacedCounter(int count)
 		{
 			this.count = count;
-		}
-
+        }
 		public int count;
 		public GameObject button;
 	}
+  internal class SocketInfo
+  {
+        public SocketInfo(string infoText, Sprite referenceimg)
+        {
 
-	/// <summary>
-	/// Represents the PC ports
-	/// </summary>
-	[SerializeField]
-	private List<GameObject> m_PcPorts;
-	private PlaceCablesManager cablesManager;
-	public Transform CameraPos;
-	public Transform NextCameraPos;
-	public float TransitionTime = 3.4f;
+            inftxt = infoText;
+            btnimage= referenceimg;
+         }
 
-	[Header("UI CONTROLS")]
-	public Button ResetandStartButton;
-	public Transform resetbuttonplaceholder;
+        public String inftxt;
+        public Sprite btnimage;
 
-	public GameObject panel1, panel2;
-	public GameObject Canvas3Dinfo;
-	public Text ErrorMessage;
-	public Toggle ShowInformation;
-	public Text InfoText;
+    }
 
-
-	private float elapsed = 0;
+    public GameObject[] PuertosDelPC;
+    private PlaceCablesManager cablesManager;
+    public Transform CameraPos;
+    public Transform NextCameraPos;
+    public float TransitionTime = 3.4f;
+    bool ready;
+   
+    [Header("UI CONTROLS")]
+    public Button ResetandStartButton;
+    public Transform resetbuttonplaceholde;
+    public GameObject panel1, panel2;
+    public GameObject Canvas3Dinfo;
+    public Text ErrorMessage; 
+    public Toggle ShowInformation;
+    public Text InfoText;
+    //variables privadas
+    private float Elapsed=0;
 	[SerializeField]
 	private GameObject m_buttonModel;
-
 	private Dictionary<ConnectorType, ConnectorsPlacedCounter> m_socketsLeft;
+    //dictionary for the instructions
+    private Dictionary<ConnectorType, SocketInfo> instrucciones;
 
-	//dictionary for the instructions
-	private Dictionary<ConnectorType, string> instructions;
+    [Header("preview images")]
+    public Sprite powersupplyimg;
+    public Sprite USBimg;
+    public Sprite PS2img;
+    public Sprite RJ45img;
+    public Sprite VGAimg;
 
+    //metodos de unity
+    private void Start()
+    {
+        ready = false;
+        cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
+        ResetSimulation();
+  
+    }
 
+    /// <summary>
+    ///Corrutines
+    /// </summary>
+    IEnumerator ChangeCamerapos()
+    {
+        while (Elapsed < TransitionTime)
+        {
+            //positional things
+            CameraPos.position = Vector3.Lerp(CameraPos.position, NextCameraPos.position, Elapsed);
+            CameraPos.rotation = Quaternion.Slerp(CameraPos.rotation, NextCameraPos.rotation, Elapsed);
+            Elapsed +=  Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
 
-	/// <summary>
-	/// Called when the scene starts
-	/// </summary>
-	private void Start()
-	{
-		m_PcPorts = new List<GameObject>();
-		var ports = FindObjectsOfType<Port>();
-		m_PcPorts.Capacity = ports.Length;
-		foreach (var port in ports)
-		{
-			m_PcPorts.Add(port.gameObject);
-		};
-		cablesManager = Camera.main.GetComponent<PlaceCablesManager>();
-		ResetSimulation();
-		instructions = new Dictionary<ConnectorType, string> {
-			{ ConnectorType.None,"agarra algun componente" },
-			{ ConnectorType.PowerSupply,"conecta P1-T1-C1 Y P1-T1-C2 (power supply)" },
-			{ ConnectorType.RJ45,"conecta P1-T1-E1 Y P1-T1-E2   (RJ45) " },
-			{ ConnectorType.KeyboardPS2,"conecta P1-T1-PS2     (Teclado)" },
-			{ ConnectorType.USB,"conecta P1-T1- DEL U1 AL U4 (USB)" },
-			{ ConnectorType.VGA,"conecta P1-T1-V (VGA)" }
-			};
-	}
-
-	/// <summary>
-	///Corrutines
-	/// </summary>
-	IEnumerator ChangeCamerapos()
-	{
-		while (elapsed < TransitionTime)
-		{
-			//positional things
-			CameraPos.position = Vector3.Lerp(CameraPos.position, NextCameraPos.position, elapsed);
-			CameraPos.rotation = Quaternion.Slerp(CameraPos.rotation, NextCameraPos.rotation, elapsed);
-			elapsed += Time.deltaTime;
-			yield return new WaitForEndOfFrame();
-		}
-	}
-
-	/// <summary>
-	/// Shows an error message when user try to connect a cable in a wrong socket and disappear the message 2 seconds later 
-	/// </summary>
-	/// <returns></returns>
-	IEnumerator ShowErrorMessage()
-	{
-		ErrorMessage.color = Color.red;
-		ErrorMessage.text = "¡Ahi no va ese cable!";
-		ErrorMessage.gameObject.SetActive(true);
-		yield return new WaitForSeconds(2);
-		ErrorMessage.gameObject.SetActive(false);
-		cablesManager.wrongSlot = false;
-	}
-
-	/// <summary>
+    IEnumerator ShowErrorMessage()
+    {
+        ErrorMessage.color = Color.red;
+        ErrorMessage.text = "¡Ahi no va ese cable!";
+        ErrorMessage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        ErrorMessage.gameObject.SetActive(false);
+        cablesManager.WrongSlot = false;
+    }
 	/// Initialize the simulation
 	/// </summary>
 	public void StartSimulation()
@@ -131,9 +120,20 @@ public class GameManager : MonoBehaviour
 			{ ConnectorType.VGA, new ConnectorsPlacedCounter(1) },
 			{ ConnectorType.RJ45, new ConnectorsPlacedCounter(2) }
 		};
-		StartCoroutine(ChangeCamerapos());
-		ShowInformation.gameObject.SetActive(true);
-		//ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
+        instrucciones = new Dictionary<ConnectorType, SocketInfo> {
+            { ConnectorType.None, new SocketInfo( "agarra algun componente",null) },
+            { ConnectorType.PowerSupply,new SocketInfo("conecta P1-T1-C1 Y P1-T1-C2 (power supply)",powersupplyimg) },
+            { ConnectorType.RJ45,new SocketInfo("conecta P1-T1-E1 Y P1-T1-E2   (RJ45) ",RJ45img) },
+            { ConnectorType.KeyboardPS2,new SocketInfo("conecta P1-T1-PS2     (Teclado)",PS2img) },
+            { ConnectorType.USB,new SocketInfo("conecta P1-T1- DEL U1 AL U4 (USB)",USBimg) },
+            { ConnectorType.VGA,new SocketInfo("conecta P1-T1-V (VGA)",VGAimg) }
+            };
+
+
+        ready = true;
+        StartCoroutine(ChangeCamerapos());
+        ShowInformation.gameObject.SetActive(true);
+        //ResetandStartButton.transform.position = resetbuttonplaceholder.position; PARA CAMBIAR LA POSICION DEL BOTON
 
 		ResetandStartButton.GetComponentInChildren<Text>().text = "restaurar";
 		ResetSimulation();
@@ -142,12 +142,10 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Performs a detach-all cables
 	/// </summary>
-	public void ResetSimulation()
-	{
-		cablesManager.pieceCount = 0;
-		ErrorMessage.gameObject.SetActive(false);
-		foreach (GameObject Iterador in m_PcPorts)
-		{
+    public void ResetSimulation()
+    {
+        cablesManager.pieceCount = 0;
+        ErrorMessage.gameObject.SetActive(false);
 			var port = Iterador.GetComponent<Port>();
 			port.DetachCable();
 		}
@@ -173,6 +171,7 @@ public class GameManager : MonoBehaviour
 			var button = GameObject.Instantiate(m_buttonModel);
 			button.GetComponent<Transform>().SetParent(layout.GetComponent<Transform>());
 			button.GetComponentInChildren<Text>().text = connectorType.ToString();
+            button.GetComponentInChildren<Image>().sprite = instrucciones[connector].btnimage;
 
 			// Create heap managed counter
 			ConnectorsPlacedCounter connectorCounter;
@@ -184,9 +183,9 @@ public class GameManager : MonoBehaviour
 			button.GetComponent<Button>().onClick.AddListener(() =>
 			{
 				cablesManager.currentSelectedCable = (ConnectorType)connectorType;
-				// change the text when something is selected
-				InfoText.text = instructions[cablesManager.currentSelectedCable];
-			});
+                //change the text when something is selected
+                InfoText.text = instrucciones[cablesManager.currentSelectedCable].inftxt;
+            });
 		}
 	}
 
@@ -204,29 +203,24 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Show or hides the app how-to use information
-	/// </summary>
-	public void ToggleInfo()
-	{
-		panel1.SetActive(!panel1.activeSelf);
-		panel2.SetActive(!panel2.activeSelf);
-		Canvas3Dinfo.SetActive(!Canvas3Dinfo.activeSelf);
-	}
+    public void toggleInfo()
+    {
+        panel1.SetActive(!panel1.activeSelf);
+        panel2.SetActive(!panel2.activeSelf);
+        Canvas3Dinfo.SetActive(!Canvas3Dinfo.activeSelf);
+    }
 
-	/// <summary>
-	/// Called every frame
-	/// </summary>
-	public void Update()
-	{
-		if (cablesManager.pieceCount >= 10)
-		{
-			ErrorMessage.color = Color.green;
-			ErrorMessage.text = "¡Has completado las conexiones!";
-			ErrorMessage.gameObject.SetActive(true);
-		}
-
-		if (cablesManager.wrongSlot)
-			StartCoroutine(ShowErrorMessage());
-	}
+    public void Update()
+    {
+        if (cablesManager.pieceCount >= 10)
+        {
+            ErrorMessage.color = Color.green;
+            ErrorMessage.text = "¡Has completado las conexiones!";
+            ErrorMessage.gameObject.SetActive(true);
+           
+        }
+           
+        if(cablesManager.WrongSlot)
+               StartCoroutine(ShowErrorMessage());
+    }
 }

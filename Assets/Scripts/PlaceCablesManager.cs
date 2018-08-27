@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public class PlaceCablesManager : MonoBehaviour
 {
-	public ConnectorType currentSelectedCable;
-	public int pieceCount = 0;
-	public bool wrongSlot;
+   public ConnectorType currentSelectedCable;
+   public int pieceCount = 0;
+   public bool WrongSlot;
 
 	/// <summary>
 	/// Logic that needs to be updated every frame
@@ -28,18 +28,14 @@ public class PlaceCablesManager : MonoBehaviour
 			return;
 
 		Port portHitted = hittedObject.transform.GetComponent<Port>();
-
-		// User hitted a port and the selected connector is the same as the port connector
-		if (portHitted != null && portHitted.PortConnectorType == currentSelectedCable)
-		{
-			if (portHitted.Place())
-			{
-				pieceCount++;
-				wrongSlot = false;
-			}
-		}
-		else if (portHitted != null && portHitted.PortConnectorType != currentSelectedCable && 
-				currentSelectedCable != ConnectorType.None)
-			wrongSlot = true;
+        if (portHitted != null && portHitted.inputConnectorType == currentSelectedCable)
+        {
+			if (!portHitted.Place())
+				return;
+            pieceCount++;
+            WrongSlot = false;
+        }
+        else if(portHitted != null && portHitted.inputConnectorType != currentSelectedCable && currentSelectedCable!=ConnectorType.None)
+            WrongSlot = true;	
 	}
 }
