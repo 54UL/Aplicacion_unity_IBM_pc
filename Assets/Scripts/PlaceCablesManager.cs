@@ -9,7 +9,7 @@ public class PlaceCablesManager : MonoBehaviour
 {
    public ConnectorType currentSelectedCable;
    public int pieceCount = 0;
-   public bool WrongSlot;
+   public bool wrongSlot;
 
 	/// <summary>
 	/// Logic that needs to be updated every frame
@@ -33,9 +33,9 @@ public class PlaceCablesManager : MonoBehaviour
 			if (!portHitted.Place())
 				return;
             pieceCount++;
-            WrongSlot = false;
+            wrongSlot = false;
         }
         else if(portHitted != null && portHitted.inputConnectorType != currentSelectedCable && currentSelectedCable!=ConnectorType.None)
-            WrongSlot = true;	
+            wrongSlot = true;	
 	}
 }
